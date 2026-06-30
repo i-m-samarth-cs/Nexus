@@ -20,17 +20,18 @@ const loginSchema = z.object({
 function issueTokens(res, userId) {
   const access = jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '15m' });
   const refresh = jwt.sign({ userId }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+  const isProd = process.env.NODE_ENV === 'production';
 
   res.cookie('access_token', access, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: 15 * 60 * 1000,
   });
   res.cookie('refresh_token', refresh, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: '/api/auth/refresh',
   });
@@ -81,9 +82,17 @@ router.post('/refresh', async (req, res) => {
   }
 });
 
-router.post('/logout', (_req, res) => {
-  res.clearCookie('access_token');
-  res.clearCookie('refresh_token', { path: '/api/auth/refresh' });
+router.post('/logout', (req, res) => {
+  const isProd = process.env.NODE_ENV === 'production';
+  res.clearCookie('access_token', {
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd
+  });
+  res.clearCookie('refresh_token', { 
+    path: '/api/auth/refresh',
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd
+  });
   res.json({ message: 'Logged out' });
 });
 
