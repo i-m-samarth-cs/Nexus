@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import { io } from 'socket.io-client';
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_API_URL || '/api';
+const BASE_URL = import.meta.env.VITE_API_URL || '';
+const API_URL = BASE_URL.endsWith('/api') ? BASE_URL : `${BASE_URL}/api`;
 const api = axios.create({ baseURL: API_URL, withCredentials: true });
 let socket = null;
 
@@ -20,7 +21,7 @@ export const useWarRoomStore = create((set, get) => ({
 
   initSocket: () => {
     if (!socket) {
-      const SOCKET_URL = import.meta.env.VITE_API_URL || '/';
+      const SOCKET_URL = BASE_URL.endsWith('/api') ? BASE_URL.replace(/\/api$/, '') : (BASE_URL || '/');
       socket = io(SOCKET_URL, { path: '/socket.io' });
 
       socket.on('connect', () => set({ socketConnected: true }));
