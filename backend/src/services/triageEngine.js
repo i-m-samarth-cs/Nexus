@@ -1,10 +1,5 @@
 import OpenAI from 'openai';
 
-const openai = new OpenAI({
-  apiKey: process.env.NVIDIA_API_KEY,
-  baseURL: 'https://integrate.api.nvidia.com/v1',
-});
-
 const SYSTEM_PROMPT = `You are NEXUS — an AI academic operations planner. Your role is military-style, precise, and directive.
 
 You receive a JSON payload containing a student's academic situation: subjects, deadlines, study sessions, and timing.
@@ -43,6 +38,11 @@ export async function runTriageEngine(payload) {
   if (!process.env.NVIDIA_API_KEY) {
     throw new Error('NVIDIA_API_KEY is not configured');
   }
+
+  const openai = new OpenAI({
+    apiKey: process.env.NVIDIA_API_KEY,
+    baseURL: 'https://integrate.api.nvidia.com/v1',
+  });
 
   const response = await openai.chat.completions.create({
     model: 'meta/llama-3.1-8b-instruct',
