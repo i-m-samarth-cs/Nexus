@@ -1,0 +1,205 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  background-color: #080c14;
+  color: #e0eaf5;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0d1420;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a3050;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f5ff44;
+}
+
+.glow-red {
+  box-shadow: 0 0 8px 1px rgba(255, 45, 85, 0.3), inset 0 0 12px rgba(255, 45, 85, 0.05);
+  border-color: rgba(255, 45, 85, 0.5) !important;
+}
+.glow-amber {
+  box-shadow: 0 0 8px 1px rgba(255, 159, 10, 0.3), inset 0 0 12px rgba(255, 159, 10, 0.05);
+  border-color: rgba(255, 159, 10, 0.5) !important;
+}
+.glow-green {
+  box-shadow: 0 0 8px 1px rgba(48, 209, 88, 0.3), inset 0 0 12px rgba(48, 209, 88, 0.05);
+  border-color: rgba(48, 209, 88, 0.5) !important;
+}
+.glow-cyan {
+  box-shadow: 0 0 8px 1px rgba(0, 245, 255, 0.2), inset 0 0 12px rgba(0, 245, 255, 0.03);
+  border-color: rgba(0, 245, 255, 0.3) !important;
+}
+
+.scanline-sweep {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(transparent, rgba(0, 245, 255, 0.4), transparent);
+  pointer-events: none;
+  z-index: 9999;
+  animation: scanline 700ms linear forwards;
+}
+
+@keyframes scanline {
+  0%   { top: 0%;   opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+@keyframes bootFadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.boot-zone {
+  animation: bootFadeIn 300ms ease forwards;
+  opacity: 0;
+}
+
+@keyframes flipUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.flip-digit {
+  animation: flipUp 80ms ease forwards;
+}
+
+.dot-breathe-critical {
+  animation: breathe 1.2s ease-in-out infinite;
+}
+.dot-breathe-elevated {
+  animation: breathe 2s ease-in-out infinite;
+}
+.dot-breathe-safe {
+  animation: breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1);    opacity: 1; }
+  50%       { transform: scale(1.08); opacity: 0.75; }
+}
+
+@keyframes criticalPulse {
+  0%, 100% { box-shadow: 0 0 8px 1px rgba(255,45,85,0.3); }
+  50%       { box-shadow: 0 0 16px 4px rgba(255,45,85,0.6); }
+}
+
+.badge-critical {
+  animation: criticalPulse 1.5s ease-in-out infinite;
+}
+
+.terminal-text {
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.display-text {
+  font-family: 'Orbitron', monospace;
+}
+
+input, textarea, select {
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none;
+}
+
+.nexus-input {
+  background: rgba(0, 245, 255, 0.03);
+  border: 1px solid rgba(0, 245, 255, 0.15);
+  color: #e0eaf5;
+  padding: 8px 12px;
+  font-family: 'Share Tech Mono', monospace;
+  transition: border-color 150ms;
+}
+.nexus-input:focus {
+  border-color: rgba(0, 245, 255, 0.4);
+  box-shadow: 0 0 6px rgba(0, 245, 255, 0.1);
+}
+.nexus-input::placeholder {
+  color: #4a6580;
+}
+
+.nexus-btn {
+  font-family: 'Orbitron', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  background: rgba(0, 245, 255, 0.05);
+  color: #00f5ff;
+  cursor: pointer;
+  transition: all 150ms;
+  text-transform: uppercase;
+}
+.nexus-btn:hover {
+  background: rgba(0, 245, 255, 0.12);
+  border-color: rgba(0, 245, 255, 0.6);
+  box-shadow: 0 0 8px rgba(0, 245, 255, 0.15);
+}
+.nexus-btn:active {
+  transform: scale(0.98);
+}
+
+.nexus-btn-red {
+  border-color: rgba(255, 45, 85, 0.4);
+  background: rgba(255, 45, 85, 0.07);
+  color: #ff2d55;
+}
+.nexus-btn-red:hover {
+  background: rgba(255, 45, 85, 0.15);
+  border-color: rgba(255, 45, 85, 0.7);
+  box-shadow: 0 0 8px rgba(255, 45, 85, 0.2);
+}
+
+.nexus-btn-green {
+  border-color: rgba(48, 209, 88, 0.4);
+  background: rgba(48, 209, 88, 0.07);
+  color: #30d158;
+}
+.nexus-btn-green:hover {
+  background: rgba(48, 209, 88, 0.15);
+  border-color: rgba(48, 209, 88, 0.7);
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.2);
+}
+
+.zone-card {
+  background: #0d1420;
+  border: 1px solid rgba(74, 101, 128, 0.3);
+  position: relative;
+}
+
+.zone-label {
+  font-family: 'Orbitron', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  color: #4a6580;
+  text-transform: uppercase;
+}
+
+.risk-critical { color: #ff2d55; }
+.risk-elevated { color: #ff9f0a; }
+.risk-nominal  { color: #30d158; }

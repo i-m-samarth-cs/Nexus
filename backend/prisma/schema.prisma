@@ -1,0 +1,87 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String?   @default("Operative")
+  color        String?   @default("#00f5ff")
+  createdAt    DateTime  @default(now())
+  subjects     Subject[]
+  triageCache  TriageCache?
+  warRoomId    String?
+  warRoom      WarRoom?  @relation(fields: [warRoomId], references: [id])
+
+  @@map("users")
+}
+
+model Subject {
+  id            String         @id @default(cuid())
+  userId        String
+  name          String
+  color         String         @default("#00f5ff")
+  difficulty    Int            @default(3)
+  weeklyTarget  Int            @default(3)
+  createdAt     DateTime       @default(now())
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deadlines     Deadline[]
+  studySessions StudySession[]
+
+  @@map("subjects")
+}
+
+model Deadline {
+  id          String    @id @default(cuid())
+  subjectId   String
+  title       String
+  type        String
+  dueDate     DateTime
+  weight      Float     @default(10)
+  isComplete  Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  subject     Subject   @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@map("deadlines")
+}
+
+model StudySession {
+  id           String   @id @default(cuid())
+  subjectId    String
+  startTime    DateTime @default(now())
+  duration     Int
+  focusRating  Int      @default(3)
+  missionLog   String   @default("")
+  isComplete   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  subject      Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@map("study_sessions")
+}
+
+model TriageCache {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  briefing   String
+  priorities Json
+  generatedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("triage_cache")
+}
+
+model WarRoom {
+  id        String   @id @default(cuid())
+  name      String
+  passcode  String   @unique
+  createdAt DateTime @default(now())
+  members   User[]
+
+  @@map("war_rooms")
+}
